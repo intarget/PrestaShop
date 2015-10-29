@@ -6,7 +6,7 @@ Tested up to: 1.6.1.1
 Stable tag: 1.0  
 License: GNU General Public License, version 2  
 
-**inTarget** - Описание проекта.
+**inTarget** - Сервис повышения продаж и аналитика посетителей сайта.
 
 ## Установка
 
@@ -15,21 +15,18 @@ License: GNU General Public License, version 2
  - В строке "Файл модуля" укажите ссылку на архив модуля intarget.zip
  - Установите модуль. Введите **email** и **ключ API** полученные в ЛК [inTarget](https://intarget.ru).
 
- Более детальную информацию смотрите на сайте [inTarget](https://intarget.ru)
+Более детальную информацию смотрите на сайте [inTarget](https://intarget.ru)
 
+## Модуль "inTarget"
 
- ## Модуль "inTarget"
+Данный модуль находится на панели администрации в разделах *"Модули"* и *"Seo"*.
 
- Данный модуль находится на панели администрации в разделах *"Модули"* и *"Seo"*.
+Здесь задаются:
 
- Здесь задаются:
+**email:** необходимо указать email зарегистрированный в системе [inTarget](https://intarget.ru);
+**ключ API:** необходимо указать ключ API, полученный в ЛК [inTarget](https://intarget.ru).
 
- **email:** необходимо указать email зарегистрированный в системе [inTarget](https://intarget.ru);  
- **ключ API:** необходимо указать ключ API, полученный в ЛК [inTarget](https://intarget.ru).
+## Изменения
 
-
- ## Изменения
-
-
- #### 1.0
+#### 1.0
  * Релиз.
