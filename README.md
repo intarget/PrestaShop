@@ -23,7 +23,7 @@ License: GNU General Public License, version 2
 
 Здесь задаются:
 
-**email:** необходимо указать email зарегистрированный в системе [inTarget](https://intarget.ru);
+**email:** необходимо указать email зарегистрированный в системе [inTarget](https://intarget.ru);  
 **ключ API:** необходимо указать ключ API, полученный в ЛК [inTarget](https://intarget.ru).
 
 ## Изменения
