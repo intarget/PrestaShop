@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>intarget</name>
+	<displayName><![CDATA[inTarget module]]></displayName>
+	<version><![CDATA[1.0.0]]></version>
+	<description><![CDATA[Сервис повышения продаж и аналитика посетителей сайта]]></description>
+	<author><![CDATA[inTarget Team]]></author>
+	<tab><![CDATA[seo]]></tab>
+	<confirmUninstall><![CDATA[Вы действительно хотите удалить модуль inTarget?]]></confirmUninstall>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
