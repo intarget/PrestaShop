@@ -17,6 +17,7 @@ License: GNU General Public License, version 2
 
  Более детальную информацию смотрите на сайте [inTarget](https://intarget.ru)
 
+
  ## Модуль "inTarget"
 
  Данный модуль находится на панели администрации в разделах *"Модули"* и *"Seo"*.
@@ -26,7 +27,9 @@ License: GNU General Public License, version 2
  **email:** необходимо указать email зарегистрированный в системе [inTarget](https://intarget.ru);  
  **ключ API:** необходимо указать ключ API, полученный в ЛК [inTarget](https://intarget.ru).
 
+
  ## Изменения
+
 
  #### 1.0
  * Релиз.
