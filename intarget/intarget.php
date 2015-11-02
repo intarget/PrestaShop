@@ -9,8 +9,6 @@
 class Intarget extends Module
 {
 
-    public $success_reg = 0;
-
     public function __construct()
     {
         $this->name = 'intarget';
@@ -481,9 +479,15 @@ class Intarget extends Module
 
     public function hookDisplayProductButtons()
     {
-        $current_order = Tools::getValue('id_order');
-        $context = Context::getContext();
-        $context->cookie->__set('intrgt_idord', 1);
+        $intargetjscode = '';
+
+
+        if (Configuration::get('intarget_id')) {
+            $intargetjscode .= $this->intargetjscode(Configuration::get('intarget_id'));
+            $intargetjscode .= $this->ajaxaddtocartjscode;
+        }
+        $this->context->smarty->assign('intargetjscode', $intargetjscode);
+        return $this->display(__FILE__, 'intarget.tpl');
     }
 
     /* Вывод кода в шапке */
