@@ -9,15 +9,14 @@
 class Intarget extends Module
 {
 
-    public $errors = array();
-    public $succ = array();
+    public $success_reg = 0;
 
     public function __construct()
     {
         $this->name = 'intarget';
         $this->tab = 'seo';
         $this->config_form = 'password';
-        $this->version = '1.0.0';
+        $this->version = '1.0.1';
         $this->author = 'inTarget Team';
         $this->need_instance = 1;
         $this->bootstrap = true;
@@ -35,7 +34,7 @@ class Intarget extends Module
         if (!Configuration::get('intarget_id')) Configuration::updateValue('intarget_id', '');
         return parent::install() &&
         $this->registerHook('displayTop') &&
-        $this->registerHook('displayHeader') &&
+        $this->registerHook('ActionCustomerAccountAdd') &&
         $this->registerHook('displayFooter') &&
         $this->registerHook('backOfficeHeader') &&
         $this->registerHook('displayProductButtons') &&
@@ -381,7 +380,7 @@ class Intarget extends Module
                     document.getElementById('add_to_cart').onclick = function() {
                         inTarget.event('add-to-cart');
                         //debug
-                        console.log('inTarget: add-to-cart2');
+                        console.log('inTarget: add-to-cart');
                     };
 </script>";
 
@@ -404,15 +403,6 @@ class Intarget extends Module
                 });
         </script>";
 
-    public $registerjscode = "
-        <script type='text/javascript'>
-                $(function(){
-                    inTarget.event('user-reg');
-                    //debug
-                    console.log('inTarget: register user');
-                });
-        </script>";
-
     public $orderjscode = "
         <script type='text/javascript'>
         (function(w, c) {
@@ -424,6 +414,18 @@ class Intarget extends Module
             });
         })(window, 'inTargetCallbacks');
         </script>";
+
+    public $regjscode = "
+     <script type='text/javascript'>
+                (function(w, c) {
+                    w[c] = w[c] || [];
+                    w[c].push(function(inTarget) {
+                        inTarget.event('reg-user');
+                        //debug
+                        console.log('inTarget: reg-user');
+                    });
+                })(window, 'inTargetCallbacks');
+    </script>";
 
     static public function intargetjscode($id)
     {
@@ -446,6 +448,7 @@ class Intarget extends Module
         return $jscode;
     }
 
+
     /**
      * Save form data.
      */
@@ -465,21 +468,22 @@ class Intarget extends Module
         /* Place your code here. */
     }
 
-    public function hookDisplayHeader()
+    public function hookActionCustomerAccountAdd($params)
     {
+        $context = Context::getContext();
+        if($params['_POST']['is_new_customer'] == 1) {
+            ($params['_POST']['back'] == 'my-account') ? $context->cookie->__set('intrgt_reg', 1) : '';
+        } else {
+            var_dump($params);
+            exit;
+        }
     }
 
     public function hookDisplayProductButtons()
     {
-        $intargetjscode = '';
-
-
-        if (Configuration::get('intarget_id')) {
-            $intargetjscode .= $this->intargetjscode(Configuration::get('intarget_id'));
-            $intargetjscode .= $this->ajaxaddtocartjscode;
-        }
-        $this->context->smarty->assign('intargetjscode', $intargetjscode);
-        return $this->display(__FILE__, 'intarget.tpl');
+        $current_order = Tools::getValue('id_order');
+        $context = Context::getContext();
+        $context->cookie->__set('intrgt_idord', 1);
     }
 
     /* Вывод кода в шапке */
@@ -502,19 +506,35 @@ class Intarget extends Module
                 $intargetjscode .= $this->catjscode;
             }
 
+            $context = Context::getContext();
             if ($currcontroller == 'orderconfirmationcontroller') {
                 $current_order = Tools::getValue('id_order');
-                $context = Context::getContext();
-                var_dump($current_order);
-                var_dump($currcontroller);
-                var_dump($context->cookie->intrgt_idord);
                 if (!empty($current_order) && $current_order != $context->cookie->intrgt_idord) {
                     $context->cookie->__set('intrgt_idord', $current_order);
                     $intargetjscode .= $this->orderjscode;
                 }
             }
+
+            if ($currcontroller == 'myaccountcontroller') {
+                if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
+                    $intargetjscode .= $this->regjscode;
+                    $context->cookie->__set('intrgt_reg', false);
+                }
+            }
+
+            if ($currcontroller == 'addresscontroller') {
+                if (!isset($context->cookie->intrgt_reg))
+                    $context->cookie->__set('intrgt_reg', 1);
+                if(Tools::getValue('back') == 'order?step=1' || Tools::getValue('back') == 'order.php?step=1') {
+                    if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
+                        $intargetjscode .= $this->regjscode;
+                        $context->cookie->__set('intrgt_reg', false);
+                    }
+                }
+            }
         }
         $this->context->smarty->assign('intargetjscode', $intargetjscode);
+        $this->context->smarty->assign('in_contr', $currcontroller);
         return $this->display(__FILE__, 'intarget.tpl');
     }
 }

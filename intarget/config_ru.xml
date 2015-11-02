@@ -2,7 +2,7 @@
 <module>
 	<name>intarget</name>
 	<displayName><![CDATA[inTarget module]]></displayName>
-	<version><![CDATA[1.0.0]]></version>
+	<version><![CDATA[1.0.1]]></version>
 	<description><![CDATA[Сервис повышения продаж и аналитика посетителей сайта]]></description>
 	<author><![CDATA[inTarget Team]]></author>
 	<tab><![CDATA[seo]]></tab>
