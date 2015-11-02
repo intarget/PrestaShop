@@ -420,9 +420,9 @@ class Intarget extends Module
                 (function(w, c) {
                     w[c] = w[c] || [];
                     w[c].push(function(inTarget) {
-                        inTarget.event('reg-user');
+                        inTarget.event('user-reg');
                         //debug
-                        console.log('inTarget: reg-user');
+                        console.log('inTarget: user-reg');
                     });
                 })(window, 'inTargetCallbacks');
     </script>";
