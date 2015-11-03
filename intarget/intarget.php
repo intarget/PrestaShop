@@ -9,6 +9,8 @@
 class Intarget extends Module
 {
 
+    public $success_reg = 0;
+
     public function __construct()
     {
         $this->name = 'intarget';
@@ -30,13 +32,29 @@ class Intarget extends Module
         if (!Configuration::get('intarget_email')) Configuration::updateValue('intarget_email', '');
         if (!Configuration::get('intarget_key')) Configuration::updateValue('intarget_key', '');
         if (!Configuration::get('intarget_id')) Configuration::updateValue('intarget_id', '');
+
         return parent::install() &&
         $this->registerHook('displayTop') &&
         $this->registerHook('ActionCustomerAccountAdd') &&
         $this->registerHook('displayFooter') &&
         $this->registerHook('backOfficeHeader') &&
         $this->registerHook('displayProductButtons') &&
-        $this->registerHook('displayBackOfficeHeader');
+        $this->registerHook('displayBackOfficeHeader') &&
+        $this->installDB();
+    }
+
+    public function installDB()
+    {
+        $return = true;
+        $return &= Db::getInstance()->execute('
+				CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'intarget_table` (
+				`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+				`user_id` int(10) unsigned NOT NULL ,
+				`user-reg` int(10),
+				PRIMARY KEY (`id`)
+			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8 ;'
+        );
+        return $return;
     }
 
     public function uninstall()
@@ -44,9 +62,16 @@ class Intarget extends Module
         if (Configuration::get('intarget_id')) Configuration::updateValue('intarget_id', '');
         if (Configuration::get('intarget_key')) Configuration::updateValue('intarget_key', '');
         if (Configuration::get('intarget_email')) Configuration::updateValue('intarget_email', '');
-        return parent::uninstall();
+
+        return parent::uninstall() && $this->uninstallDB();
     }
 
+    public function uninstallDB()
+    {
+        $return = true;
+        $return &= Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'intarget_table`');
+        return $return;
+    }
 
     public function getContent()
     {
@@ -468,12 +493,12 @@ class Intarget extends Module
 
     public function hookActionCustomerAccountAdd($params)
     {
-        $context = Context::getContext();
-        if($params['_POST']['is_new_customer'] == 1) {
-            ($params['_POST']['back'] == 'my-account') ? $context->cookie->__set('intrgt_reg', 1) : '';
-        } else {
-            var_dump($params);
-            exit;
+//        $context = Context::getContext();
+        if ($params['newCustomer']->id) {
+            Db::getInstance()->insert('intarget_table', array('user_id' => $params['newCustomer']->id, 'user-reg' => 0));
+//            if($params['_POST']['back'] == 'my-account') {
+//                $context->cookie->__set('intrgt_reg', 1); //delete
+//            }
         }
     }
 
@@ -481,13 +506,14 @@ class Intarget extends Module
     {
         $intargetjscode = '';
 
-
         if (Configuration::get('intarget_id')) {
             $intargetjscode .= $this->intargetjscode(Configuration::get('intarget_id'));
             $intargetjscode .= $this->ajaxaddtocartjscode;
         }
+
         $this->context->smarty->assign('intargetjscode', $intargetjscode);
         return $this->display(__FILE__, 'intarget.tpl');
+
     }
 
     /* Вывод кода в шапке */
@@ -504,6 +530,7 @@ class Intarget extends Module
 
             if ($currcontroller == 'productcontroller') {
                 $intargetjscode .= $this->itemjscode;
+                $intargetjscode .= $this->ajaxaddtocartjscode;
             }
 
             if ($currcontroller == 'categorycontroller') {
@@ -514,31 +541,46 @@ class Intarget extends Module
             if ($currcontroller == 'orderconfirmationcontroller') {
                 $current_order = Tools::getValue('id_order');
                 if (!empty($current_order) && $current_order != $context->cookie->intrgt_idord) {
-                    $context->cookie->__set('intrgt_idord', $current_order);
+                    $this->context->cookie->__set('intrgt_idord', $current_order);
                     $intargetjscode .= $this->orderjscode;
                 }
             }
 
             if ($currcontroller == 'myaccountcontroller') {
-                if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
-                    $intargetjscode .= $this->regjscode;
-                    $context->cookie->__set('intrgt_reg', false);
+//                if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
+//                    $intargetjscode .= $this->regjscode;
+//                    $context->cookie->__set('intrgt_reg', false);
+//                }
+                if ($context->customer->isLogged()) {
+                    $current_user = (int)$context->customer->id;
+                    $intrg_res = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'intarget_table WHERE user_id = ' . $current_user);
+                    if ($intrg_res['user-reg'] == 0) {
+                        $intargetjscode .= $this->regjscode;
+                        Db::getInstance()->execute('UPDATE ' . _DB_PREFIX_ . 'intarget_table SET `user-reg` = 2 WHERE id = ' . $intrg_res['id']);
+                    }
                 }
             }
 
             if ($currcontroller == 'addresscontroller') {
-                if (!isset($context->cookie->intrgt_reg))
-                    $context->cookie->__set('intrgt_reg', 1);
+//                if (!isset($context->cookie->intrgt_reg))
+//                    $context->cookie->__set('intrgt_reg', 1);
                 if(Tools::getValue('back') == 'order?step=1' || Tools::getValue('back') == 'order.php?step=1') {
-                    if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
-                        $intargetjscode .= $this->regjscode;
-                        $context->cookie->__set('intrgt_reg', false);
+//                    if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
+//                        $intargetjscode .= $this->regjscode;
+//                        $context->cookie->__set('intrgt_reg', false);
+//                    }
+                    if ($context->customer->isLogged()) {
+                        $current_user = (int)$context->customer->id;
+                        $intrg_res = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'intarget_table WHERE user_id = ' . $current_user);
+                        if ($intrg_res['user-reg'] == 0) {
+                            $intargetjscode .= $this->regjscode;
+                            Db::getInstance()->execute('UPDATE ' . _DB_PREFIX_ . 'intarget_table SET `user-reg` = 2 WHERE id = ' . $intrg_res['id']);
+                        }
                     }
                 }
             }
         }
         $this->context->smarty->assign('intargetjscode', $intargetjscode);
-        $this->context->smarty->assign('in_contr', $currcontroller);
         return $this->display(__FILE__, 'intarget.tpl');
     }
 }

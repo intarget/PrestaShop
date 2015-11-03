@@ -3,7 +3,7 @@
 Tags: intarget, statistic, conversion, analytic  
 Requires at least: 1.5  
 Tested up to: 1.6.1.1  
-Stable tag: 1.0.1  
+Stable tag: 1.0.2
 License: GNU General Public License, version 2  
 
 **inTarget** - Сервис повышения продаж и аналитика посетителей сайта.
@@ -27,6 +27,10 @@ License: GNU General Public License, version 2
 **ключ API:** необходимо указать ключ API, полученный в ЛК [inTarget](https://intarget.ru).
 
 ## Изменения
+
+#### 1.0.2
+ - Добавлена таблица модуля ps_intarget_table.
+ - Реализована регистрация цели регистрации пользователя в БД.
 
 #### 1.0.1
  - Реализована цель регистрации пользователя через cookie.
