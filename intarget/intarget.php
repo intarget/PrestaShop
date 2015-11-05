@@ -14,15 +14,15 @@ class Intarget extends Module
     public function __construct()
     {
         $this->name = 'intarget';
-        $this->tab = 'seo';
+        $this->tab = 'analytics_stats';
         $this->config_form = 'password';
-        $this->version = '1.0.1';
+        $this->version = '1.0.2';
         $this->author = 'inTarget Team';
         $this->need_instance = 1;
         $this->bootstrap = true;
         parent::__construct();
-        $this->displayName = $this->l('inTarget module');
-        $this->description = $this->l('Сервис повышения продаж и аналитика посетителей сайта');
+        $this->displayName = $this->l('inTarget eCommerce');
+        $this->description = $this->l('inTarget — система аналитики для интернет-магазинов, с возможностью отслеживать продажи и анализировать конверсии в реальном времени.');
         $this->confirmUninstall = $this->l('Вы действительно хотите удалить модуль inTarget?');
     }
 
@@ -360,8 +360,6 @@ class Intarget extends Module
                     w[c] = w[c] || [];
                     w[c].push(function(inTarget) {
                         inTarget.event('item-view');
-                        //debug
-                        console.log('inTarget: item view');
                     });
                 })(window, 'inTargetCallbacks');
         </script>";
@@ -372,8 +370,6 @@ class Intarget extends Module
                     w[c] = w[c] || [];
                     w[c].push(function(inTarget) {
                         inTarget.event('cat-view');
-                         //debug
-                         console.log('inTarget: cat view');
                     });
                 })(window, 'inTargetCallbacks');
         </script>";
@@ -384,16 +380,12 @@ class Intarget extends Module
                 $(function(){
                     $('.quick-view').click(function(){
                         inTarget.event('item-view');
-                        //debug
-                        console.log('inTarget: item view');
                     });
                 });
 
                 $(function(){
                     $('.ajax_add_to_cart_button').click(function(){
                         inTarget.event('add-to-cart');
-                        //debug
-                        console.log('inTarget: add-to-cart1');
                     })
                 });
         </script>";
@@ -402,8 +394,6 @@ class Intarget extends Module
         <script type='text/javascript'>
                     document.getElementById('add_to_cart').onclick = function() {
                         inTarget.event('add-to-cart');
-                        //debug
-                        console.log('inTarget: add-to-cart');
                     };
 </script>";
 
@@ -412,16 +402,12 @@ class Intarget extends Module
                 $(function(){
                   $('.ajax_cart_block_remove_link').click(function(){
                       inTarget.event('del-from-cart');
-                      //debug
-                      console.log('inTarget: del ajax item');
                   });
                 });
 
                 $(function(){
                     $('.cart_quantity_delete').click(function(){
                         inTarget.event('del-from-cart');
-                        //debug
-                        console.log('inTarget: del item');
                     });
                 });
         </script>";
@@ -432,8 +418,6 @@ class Intarget extends Module
             w[c] = w[c] || [];
             w[c].push(function(inTarget) {
                 inTarget.event('success-order');
-                //debug
-                console.log('inTarget: success-order');
             });
         })(window, 'inTargetCallbacks');
         </script>";
@@ -444,8 +428,6 @@ class Intarget extends Module
                     w[c] = w[c] || [];
                     w[c].push(function(inTarget) {
                         inTarget.event('user-reg');
-                        //debug
-                        console.log('inTarget: user-reg');
                     });
                 })(window, 'inTargetCallbacks');
     </script>";

@@ -1,15 +1,14 @@
-# inTarget
+# inTarget eCommerce
 
-Tags: intarget, statistic, conversion, analytic  
+Tags: intarget, analytics, statistics, ,sales, widgets, e-commerce, ecommerce, интаргет, аналитика, статистика, интернет-магазин
 Requires at least: 1.5  
 Tested up to: 1.6.1.1  
 Stable tag: 1.0.2  
 License: GNU General Public License, version 2  
 
-**inTarget** - Сервис повышения продаж и аналитика посетителей сайта.
+**inTarget eCommerce** - система аналитики для интернет-магазинов, с возможностью отслеживать продажи и анализировать конверсии в реальном времени.
 
 ## Установка
-
  - Зайдите в административную панель сайта PrestaShop.
  - В разделе "Модули" нажмите кнопку "Добавить модуль".
  - В строке "Файл модуля" укажите ссылку на архив модуля intarget.zip
@@ -17,9 +16,9 @@ License: GNU General Public License, version 2
 
 Более детальную информацию смотрите на сайте [inTarget](https://intarget.ru)
 
-## Модуль "inTarget"
+## Модуль "inTarget eCommerce"
 
-Данный модуль находится на панели администрации в разделах *"Модули"* и *"Seo"*.
+Данный модуль находится на панели администрации в разделах *"Модули"* и *"Статистика и аналитика"*.
 
 Здесь задаются:
 
