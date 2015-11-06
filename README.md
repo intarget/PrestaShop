@@ -1,6 +1,6 @@
 # inTarget eCommerce
 
-Tags: intarget, analytics, statistics, sales, widgets, e-commerce, ecommerce, интаргет, аналитика, статистика  
+Tags: intarget, analytics, statistics, sales, widgets, ecommerce, интаргет, аналитика, статистика  
 Requires at least: 1.5  
 Tested up to: 1.6.1.1  
 Stable tag: 1.0.2  
