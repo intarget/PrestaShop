@@ -1,15 +1,14 @@
 <?php
-/*
+/**
  * 2015 inTarget
+ *
  * @author    inTarget RU <https://intarget.ru/>
  * @copyright 2015 inTarget RU
  * @license   GNU General Public License, version 2
  */
+
 class Intarget extends Module
 {
-
-    public $success_reg = 0;
-
     public function __construct()
     {
         $this->name = 'intarget';
@@ -18,19 +17,27 @@ class Intarget extends Module
         $this->version = '1.0.2';
         $this->author = 'inTarget Team';
         $this->need_instance = 1;
+
         $this->bootstrap = true;
         parent::__construct();
+
         $this->displayName = $this->l('inTarget eCommerce');
-        $this->description = $this->l('inTarget — система аналитики для интернет-магазинов, с возможностью отслеживать продажи и анализировать конверсии в реальном времени.');
+        $this->description = $this->l('Система аналитики для интернет-магазинов');
         $this->confirmUninstall = $this->l('Вы действительно хотите удалить модуль inTarget?');
     }
 
     public function install()
     {
         //задаём значение переменных по умолчанию
-        if (!Configuration::get('intarget_email')) Configuration::updateValue('intarget_email', '');
-        if (!Configuration::get('intarget_key')) Configuration::updateValue('intarget_key', '');
-        if (!Configuration::get('intarget_id')) Configuration::updateValue('intarget_id', '');
+        if (!Configuration::get('intarget_email')) {
+            Configuration::updateValue('intarget_email', '');
+        }
+        if (!Configuration::get('intarget_key')) {
+            Configuration::updateValue('intarget_key', '');
+        }
+        if (!Configuration::get('intarget_id')) {
+            Configuration::updateValue('intarget_id', '');
+        }
 
         return parent::install() &&
         $this->registerHook('displayTop') &&
@@ -43,31 +50,33 @@ class Intarget extends Module
 
     public function installDB()
     {
-        $return = true;
-        $return &= Db::getInstance()->execute('
-				CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'intarget_table` (
+        $return = Db::getInstance()->execute('CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'intarget_table` (
 				`id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 				`user_id` int(10) unsigned NOT NULL ,
 				`user-reg` int(10),
 				PRIMARY KEY (`id`)
-			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8 ;'
-        );
+			) ENGINE=' . _MYSQL_ENGINE_ . ' DEFAULT CHARSET=utf8 ;');
         return $return;
     }
 
     public function uninstall()
     {
-        if (Configuration::get('intarget_id')) Configuration::updateValue('intarget_id', '');
-        if (Configuration::get('intarget_key')) Configuration::updateValue('intarget_key', '');
-        if (Configuration::get('intarget_email')) Configuration::updateValue('intarget_email', '');
+        if (Configuration::get('intarget_id')) {
+            Configuration::updateValue('intarget_id', '');
+        }
+        if (Configuration::get('intarget_key')) {
+            Configuration::updateValue('intarget_key', '');
+        }
+        if (Configuration::get('intarget_email')) {
+            Configuration::updateValue('intarget_email', '');
+        }
 
         return parent::uninstall() && $this->uninstallDB();
     }
 
     public function uninstallDB()
     {
-        $return = true;
-        $return &= Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'intarget_table`');
+        $return = Db::getInstance()->execute('DROP TABLE IF EXISTS `' . _DB_PREFIX_ . 'intarget_table`');
         return $return;
     }
 
@@ -84,11 +93,12 @@ class Intarget extends Module
             }
         }
         if (!Configuration::get('intarget_key') && !Configuration::get('intarget_email')) {
-            return $this->displayError($this->l('Заполните обязательные поля')) . $this->displayForm() . $output;
+            return $this->displayError($this->l('Заполните обязательные поля')) . $this->displayForm()
+            . $output;
         } else {
             $key = Configuration::get('intarget_key');
             $email = Configuration::get('intarget_email');
-            $host = $this->CurrentUrl();
+            $host = $this->currentUrl();
 
             if (!Configuration::get('intarget_id')) {
                 $result = $this->GetInfoFromIntarget($key, $email, $host);
@@ -98,7 +108,8 @@ class Intarget extends Module
                 } else {
                     if ($result['ok']) {
                         $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configure.tpl');
-                        $output = $this->displayConfirmation($this->l('Поздравляем, сайт успешно привязан к аккаунту') . ' <a href="https://intarget.ru">inTarget</a>') . $this->displayFormSuccess() . $output;
+                        $output = $this->displayConfirmation($this->l('Поздравляем, сайт успешно привязан к
+                         аккаунту') . ' <a href="https://intarget.ru">inTarget</a>') . $this->displayFormSuccess() . $output;
                     }
                 }
             } else {
@@ -113,16 +124,20 @@ class Intarget extends Module
     /**
      * Возвращает url
      */
-    public function CurrentUrl()
+    public function currentUrl()
     {
         $url = 'http';
-        if (isset($_SERVER['HTTPS']))
-            if ($_SERVER['HTTPS'] == 'on')
+        if (isset($_SERVER['HTTPS'])) {
+            if ($_SERVER['HTTPS'] == 'on') {
                 $url .= 's';
+            }
+        }
         $url .= '://';
-        if ($_SERVER['SERVER_PORT'] != '80')
-            $url .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT']; else
+        if ($_SERVER['SERVER_PORT'] != '80') {
+            $url .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'];
+        } else {
             $url .= $_SERVER['SERVER_NAME'];
+        }
 
         return $url;
     }
@@ -143,7 +158,8 @@ class Intarget extends Module
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
-                    'desc' => $this->l('Оцените принципиально новый подход к просмотру статистики. Общайтесь со своей аудиторией, продавайте лучше, зарабатываейте больше. И всё это бесплатно!'),
+                    'desc' => $this->l('Оцените принципиально новый подход к просмотру статистики.
+                    Общайтесь со своей аудиторией, продавайте лучше, зарабатываейте больше. И всё это бесплатно!'),
                     'name' => 'text'),
                 array(
                     'type' => 'text',
@@ -162,17 +178,20 @@ class Intarget extends Module
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
-                    'desc' => $this->l('Введите email и ключ API из личного кабинета ') . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>',
+                    'desc' => $this->l('Введите email и ключ API из личного кабинета ')
+                        . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>',
                     'name' => 'text'),
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
-                    'desc' => $this->l('Если вы ещё не зарегистрировались в сервисе inTarget это можно сделать по ссылке ') . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>',
+                    'desc' => $this->l('Если вы ещё не зарегистрировались в сервисе inTarget это можно
+                    сделать по ссылке ') . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>',
                     'name' => 'text'),
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
-                    'desc' => $this->l('Служба технической поддержки: ') . '<a href="mailto:plugins@intarget.ru">plugins@intarget.ru</a>',
+                    'desc' => $this->l('Служба технической поддержки: ')
+                        . '<a href="mailto:plugins@intarget.ru">plugins@intarget.ru</a>',
                     'name' => 'text'),
                 array(
                     'type' => 'free',
@@ -199,11 +218,12 @@ class Intarget extends Module
         $helper->toolbar_btn = array(
             'save' => array(
                 'desc' => $this->l('Сохранить'),
-                'href' => AdminController::$currentIndex . '&configure=' . $this->name . '&save' . $this->name .
-                    '&token=' . Tools::getAdminTokenLite('AdminModules')
+                'href' => AdminController::$currentIndex . '&configure=' . $this->name . '&save'
+                    . $this->name . '&token=' . Tools::getAdminTokenLite('AdminModules')
             ),
             'back' => array(
-                'href' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite('AdminModules'),
+                'href' => AdminController::$currentIndex . '&token='
+                    . Tools::getAdminTokenLite('AdminModules'),
                 'desc' => $this->l('Венуться к списку')
             )
         );
@@ -223,14 +243,16 @@ class Intarget extends Module
         $fields_form = array();
         $fields_form[0]['form'] = array(
             'legend' => array(
-                'title' => $this->l('inTarget') . '  &mdash; ' . $this->l('Сервис повышения продаж и аналитика посетителей сайта'),
+                'title' => $this->l('inTarget') . '  &mdash; ' . $this->l('Сервис повышения продаж и
+                аналитика посетителей сайта'),
                 'icon' => 'icon-cogs'
             ),
             'input' => array(
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
-                    'desc' => $this->l('Оцените принципиально новый подход к просмотру статистики. Общайтесь со своей аудиторией, продавайте лучше, зарабатываейте больше. И всё это бесплатно!'),
+                    'desc' => $this->l('Оцените принципиально новый подход к просмотру статистики.
+                    Общайтесь со своей аудиторией, продавайте лучше, зарабатываейте больше. И всё это бесплатно!'),
                     'name' => 'text'),
                 array(
                     'type' => 'text',
@@ -247,12 +269,15 @@ class Intarget extends Module
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
-                    'desc' => $this->l('Войдите в личный кабинет ') . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>' . $this->l(' для просмотра статистики.'),
+                    'desc' => $this->l('Войдите в личный кабинет ')
+                        . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>'
+                        . $this->l(' для просмотра статистики.'),
                     'name' => 'text'),
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
-                    'desc' => $this->l('Служба технической поддержки: ') . '<a href="mailto:plugins@intarget.ru">plugins@intarget.ru</a>',
+                    'desc' => $this->l('Служба технической поддержки: ')
+                        . '<a href="mailto:plugins@intarget.ru">plugins@intarget.ru</a>',
                     'name' => 'text'),
                 array(
                     'type' => 'free',
@@ -279,11 +304,12 @@ class Intarget extends Module
         $helper->toolbar_btn = array(
             'save' => array(
                 'desc' => $this->l('Сохранить'),
-                'href' => AdminController::$currentIndex . '&configure=' . $this->name . '&save' . $this->name .
-                    '&token=' . Tools::getAdminTokenLite('AdminModules')
+                'href' => AdminController::$currentIndex . '&configure=' . $this->name . '&save'
+                    . $this->name . '&token=' . Tools::getAdminTokenLite('AdminModules')
             ),
             'back' => array(
-                'href' => AdminController::$currentIndex . '&token=' . Tools::getAdminTokenLite('AdminModules'),
+                'href' => AdminController::$currentIndex . '&token='
+                    . Tools::getAdminTokenLite('AdminModules'),
                 'desc' => $this->l('Венуться к списку')
             )
         );
@@ -304,29 +330,32 @@ class Intarget extends Module
         $(document).ready(function () {
                 $("input[id=intarget_email]").attr("disabled", "disabled");
                 $("input[id=intarget_key]").attr("disabled", "disabled");
-                $("input[id=intarget_email]").before("<img title=\"Введен правильный email!\" class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
-                $("input[id=intarget_key]").before("<img title=\"Введен правильный email!\" class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
+                $("input[id=intarget_email]").before("<img title=\"Введен правильный email!\"
+                    class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
+                $("input[id=intarget_key]").before("<img title=\"Введен правильный email!\"
+                    class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
              });
             </script>';
     }
 
     /**
      * Получает Id площадки
+     *
      * @param bool $token
+     *
      * @return bool|mixed|string
      */
-    public function GetInfoFromIntarget($key, $email, $host)
+    public function getInfoFromIntarget($key, $email, $host)
     {
         $ch = curl_init();
         $jsondata = Tools::jsonEncode(array(
-                'email' => $email,
-                'key' => $key,
-                'url' => $host,
-                'cms' => 'prestashop'
-            )
-        );
+            'email' => $email,
+            'key' => $key,
+            'url' => $host,
+            'cms' => 'prestashop'));
 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Accept: application/json'));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type:application/json', 'Accept: application/json'));
         curl_setopt($ch, CURLOPT_URL, "http://intarget-dev.lembrd.com/api/registration.json");
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsondata);
@@ -342,10 +371,19 @@ class Intarget extends Module
                 Configuration::updateValue('intarget_id', $json_result->payload->projectId);
                 return array('ok' => $json_result->payload->projectId);
             } elseif ($json_result->status == 'error') {
-                if ($json_result->code == '403') $json_result->message = $this->l('Введен неверный ключ API!');
-                if ($json_result->code == '500') $json_result->message = $this->l('Невозможно создать проект. Возможно, он уже создан.');
-                if ($json_result->code == '404') $json_result->message = $this->l('Данный email ') . $email . $this->l(' не зарегистрирован на сайте http://intarget.ru');
-                if (!isset($json_result->code)) $json_result->message = $this->l('Неверный формат данных.');
+                if ($json_result->code == '403') {
+                    $json_result->message = $this->l('Введен неверный ключ API!');
+                }
+                if ($json_result->code == '500') {
+                    $json_result->message = $this->l('Невозможно создать проект. Возможно, он уже создан.');
+                }
+                if ($json_result->code == '404') {
+                    $json_result->message = $this->l('Данный email ') . $email . $this->l(' не
+                    зарегистрирован на сайте http://intarget.ru');
+                }
+                if (!isset($json_result->code)) {
+                    $json_result->message = $this->l('Неверный формат данных.');
+                }
                 return array('error' => $json_result->message);
             }
         }
@@ -430,7 +468,7 @@ class Intarget extends Module
                 })(window, 'inTargetCallbacks');
     </script>";
 
-    static public function intargetjscode($id)
+    public function intargetjscode($id)
     {
         $jscode = "<script type='text/javascript'>
                     (function(d, w, c) {
@@ -462,7 +500,9 @@ class Intarget extends Module
     public function hookActionCustomerAccountAdd($params)
     {
         if ($params['newCustomer']->id) {
-            Db::getInstance()->insert('intarget_table', array('user_id' => $params['newCustomer']->id, 'user-reg' => 0));
+            Db::getInstance()->insert('intarget_table', array(
+                'user_id' => $params['newCustomer']->id,
+                'user-reg' => 0));
         }
     }
 
@@ -513,22 +553,26 @@ class Intarget extends Module
             if ($currcontroller == 'myaccountcontroller') {
                 if ($context->customer->isLogged()) {
                     $current_user = (int)$context->customer->id;
-                    $intrg_res = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'intarget_table WHERE user_id = ' . $current_user);
+                    $intrg_res = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'intarget_table
+                     WHERE user_id = ' . $current_user);
                     if ($intrg_res['user-reg'] == 0) {
                         $intargetjscode .= $this->regjscode;
-                        Db::getInstance()->execute('UPDATE ' . _DB_PREFIX_ . 'intarget_table SET `user-reg` = 2 WHERE id = ' . $intrg_res['id']);
+                        Db::getInstance()->execute('UPDATE ' . _DB_PREFIX_ . 'intarget_table SET `user-reg`
+                         = 2 WHERE id = ' . $intrg_res['id']);
                     }
                 }
             }
 
             if ($currcontroller == 'addresscontroller') {
-                if (Tools::getValue('back') == 'order?step=1' || Tools::getValue('back') == 'order.php?step=1') {
+                if (Tools::getValue('back') == 'order?step=1' || Tools::getValue('back') == 'order.php?step=1'
+                ) {
                     if ($context->customer->isLogged()) {
                         $current_user = (int)$context->customer->id;
                         $intrg_res = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'intarget_table WHERE user_id = ' . $current_user);
                         if ($intrg_res['user-reg'] == 0) {
                             $intargetjscode .= $this->regjscode;
-                            Db::getInstance()->execute('UPDATE ' . _DB_PREFIX_ . 'intarget_table SET `user-reg` = 2 WHERE id = ' . $intrg_res['id']);
+                            Db::getInstance()->execute('UPDATE ' . _DB_PREFIX_ . 'intarget_table SET
+                            `user-reg` = 2 WHERE id = ' . $intrg_res['id']);
                         }
                     }
                 }
