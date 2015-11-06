@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * 2015 inTarget
  * @author    inTarget RU <https://intarget.ru/>
  * @copyright 2015 inTarget RU
@@ -304,8 +304,8 @@ class Intarget extends Module
         $(document).ready(function () {
                 $("input[id=intarget_email]").attr("disabled", "disabled");
                 $("input[id=intarget_key]").attr("disabled", "disabled");
-                $("input[id=intarget_email]").before("<img title=\"Введен правильный email!\" class=\"intrg_ok\" src=\"' . $this->_path . '/ok.png\">");
-                $("input[id=intarget_key]").before("<img title=\"Введен правильный email!\" class=\"intrg_ok\" src=\"' . $this->_path . '/ok.png\">");
+                $("input[id=intarget_email]").before("<img title=\"Введен правильный email!\" class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
+                $("input[id=intarget_key]").before("<img title=\"Введен правильный email!\" class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
              });
             </script>';
     }
