@@ -1,5 +1,4 @@
 <?php
-
 /**
  * 2015 inTarget
  * @author    inTarget RU <https://intarget.ru/>
@@ -39,7 +38,6 @@ class Intarget extends Module
         $this->registerHook('displayFooter') &&
         $this->registerHook('backOfficeHeader') &&
         $this->registerHook('displayProductButtons') &&
-        $this->registerHook('displayBackOfficeHeader') &&
         $this->installDB();
     }
 
@@ -320,7 +318,7 @@ class Intarget extends Module
     public function GetInfoFromIntarget($key, $email, $host)
     {
         $ch = curl_init();
-        $jsondata = json_encode(array(
+        $jsondata = Tools::jsonEncode(array(
                 'email' => $email,
                 'key' => $key,
                 'url' => $host,
@@ -336,7 +334,7 @@ class Intarget extends Module
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         $server_output = curl_exec($ch);
 
-        $json_result = json_decode($server_output);
+        $json_result = Tools::jsonDecode($server_output);
         curl_close($ch);
 
         if (isset($json_result->status)) {
@@ -461,26 +459,10 @@ class Intarget extends Module
     {
     }
 
-    /**
-     * Add the CSS & JavaScript files you want to be loaded in the BO.
-     */
-    public function hookBackOfficeHeader()
-    {
-    }
-
-    public function hookDisplayBackOfficeHeader()
-    {
-        /* Place your code here. */
-    }
-
     public function hookActionCustomerAccountAdd($params)
     {
-//        $context = Context::getContext();
         if ($params['newCustomer']->id) {
             Db::getInstance()->insert('intarget_table', array('user_id' => $params['newCustomer']->id, 'user-reg' => 0));
-//            if($params['_POST']['back'] == 'my-account') {
-//                $context->cookie->__set('intrgt_reg', 1); //delete
-//            }
         }
     }
 
@@ -529,10 +511,6 @@ class Intarget extends Module
             }
 
             if ($currcontroller == 'myaccountcontroller') {
-//                if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
-//                    $intargetjscode .= $this->regjscode;
-//                    $context->cookie->__set('intrgt_reg', false);
-//                }
                 if ($context->customer->isLogged()) {
                     $current_user = (int)$context->customer->id;
                     $intrg_res = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'intarget_table WHERE user_id = ' . $current_user);
@@ -544,13 +522,7 @@ class Intarget extends Module
             }
 
             if ($currcontroller == 'addresscontroller') {
-//                if (!isset($context->cookie->intrgt_reg))
-//                    $context->cookie->__set('intrgt_reg', 1);
-                if(Tools::getValue('back') == 'order?step=1' || Tools::getValue('back') == 'order.php?step=1') {
-//                    if (isset($context->cookie->intrgt_reg) && !empty($context->cookie->intrgt_reg)) {
-//                        $intargetjscode .= $this->regjscode;
-//                        $context->cookie->__set('intrgt_reg', false);
-//                    }
+                if (Tools::getValue('back') == 'order?step=1' || Tools::getValue('back') == 'order.php?step=1') {
                     if ($context->customer->isLogged()) {
                         $current_user = (int)$context->customer->id;
                         $intrg_res = Db::getInstance()->getRow('SELECT * FROM ' . _DB_PREFIX_ . 'intarget_table WHERE user_id = ' . $current_user);

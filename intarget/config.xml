@@ -6,6 +6,8 @@
 	<description><![CDATA[inTarget — система аналитики для интернет-магазинов, с возможностью отслеживать продажи и анализировать конверсии в реальном времени.]]></description>
 	<author><![CDATA[inTarget Team]]></author>
 	<tab><![CDATA[analytics_stats]]></tab>
+	<confirmUninstall><![CDATA[Вы действительно хотите удалить модуль inTarget?]]></confirmUninstall>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
+	<limited_countries></limited_countries>
 </module>
