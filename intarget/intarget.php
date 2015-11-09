@@ -317,8 +317,7 @@ class Intarget extends Module
         // Загружаем нужные нам значения из базы
         $helper->fields_value['intarget_key'] = Configuration::get('intarget_key');
         $helper->fields_value['intarget_email'] = Configuration::get('intarget_email');
-        return $helper->generateForm($fields_form) . '
-        <style>
+        return $helper->generateForm($fields_form) . "<style>
         .intrg_ok{
             right: 5px;
             top: 6px;
@@ -328,14 +327,12 @@ class Intarget extends Module
         </style>
         <script>
         $(document).ready(function () {
-                $("input[id=intarget_email]").attr("disabled", "disabled");
-                $("input[id=intarget_key]").attr("disabled", "disabled");
-                $("input[id=intarget_email]").before("<img title=\"Введен правильный email!\"
-                    class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
-                $("input[id=intarget_key]").before("<img title=\"Введен правильный email!\"
-                    class=\"intrg_ok\" src=\"' . $this->_path . 'view/img/ok.png\">");
+                $('input[id=intarget_email]').attr('disabled', 'disabled');
+                $('input[id=intarget_key]').attr('disabled', 'disabled');
+                $('input[id=intarget_email]').before(\"<img title='Введен правильный email!' class='intrg_ok' src='$this->_path/views/img/ok.png' >\");
+                $('input[id=intarget_key]').before(\"<img title='Введен правильный email!' class='intrg_ok' src='$this->_path/views/img/ok.png' >\");
              });
-            </script>';
+            </script>";
     }
 
     /**
