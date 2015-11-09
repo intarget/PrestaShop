@@ -89,7 +89,7 @@ class Intarget extends Module
             if (!empty($intarget_key) && !empty($intarget_email)) {
                 Configuration::updateValue('intarget_key', $intarget_key);
                 Configuration::updateValue('intarget_email', $intarget_email);
-                $output = $this->displayConfirmation($this->l('Поздравляем, сайт успешно привязан к аккаунту') . ' <a href="https://intarget.ru">inTarget</a>') . $this->displayFormSuccess() . $output;
+                $output = $this->displayConfirmation($this->l('Поздравляем, сайт успешно привязан к аккаунту') . ' <a href="https://intarget.ru" target="_blank">inTarget</a>') . $this->displayFormSuccess() . $output;
             }
         }
         if (!Configuration::get('intarget_key') && !Configuration::get('intarget_email')) {
@@ -109,12 +109,12 @@ class Intarget extends Module
                     if ($result['ok']) {
                         $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configure.tpl');
                         $output = $this->displayConfirmation($this->l('Поздравляем, сайт успешно привязан к
-                         аккаунту') . ' <a href="https://intarget.ru">inTarget</a>') . $this->displayFormSuccess() . $output;
+                         аккаунту') . ' <a href="https://intarget.ru" target="_blank">inTarget</a>') . $this->displayFormSuccess() . $output;
                     }
                 }
             } else {
                 $output = $this->context->smarty->fetch($this->local_path . 'views/templates/admin/configure.tpl');
-                $output = $this->displayConfirmation($this->l('Поздравляем, сайт успешно привязан к аккаунту') . ' <a href="https://intarget.ru">inTarget</a>') . $this->displayFormSuccess() . $output;
+                $output = $this->displayConfirmation($this->l('Поздравляем, сайт успешно привязан к аккаунту') . ' <a href="https://intarget.ru" target="_blank">inTarget</a>') . $this->displayFormSuccess() . $output;
             }
 
             return $output;
@@ -353,7 +353,7 @@ class Intarget extends Module
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type:application/json', 'Accept: application/json'));
-        curl_setopt($ch, CURLOPT_URL, "http://intarget-dev.lembrd.com/api/registration.json");
+        curl_setopt($ch, CURLOPT_URL, "http://intarget.ru/api/registration.json"); //intarget-dev.lembrd.com
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsondata);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -477,7 +477,7 @@ class Intarget extends Module
                       f = function () { n.parentNode.insertBefore(s, n); };
                       s.type = 'text/javascript';
                       s.async = true;
-                      s.src = '//rt.intarget-dev.lembrd.com/loader.js';
+                      s.src = '//rt.intarget.ru/loader.js';
                       if (w.opera == '[object Opera]') {
                           d.addEventListener('DOMContentLoaded', f, false);
                       } else { f(); }
