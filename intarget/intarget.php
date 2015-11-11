@@ -384,7 +384,7 @@ class Intarget extends Module
                 return array('error' => $json_result->message);
             }
         }
-        return true;
+        return array('error' => $this->l('Ответ от сервера inTarget не получен. Попробуйсте, пожалуйста, позднее.'));
     }
 
     public $itemjscode = "
