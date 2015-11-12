@@ -357,7 +357,7 @@ class Intarget extends Module
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsondata);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+
         $server_output = curl_exec($ch);
 
         $json_result = Tools::jsonDecode($server_output);
