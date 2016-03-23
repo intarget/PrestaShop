@@ -2,7 +2,7 @@
 <module>
     <name>intarget</name>
     <displayName><![CDATA[inTarget eCommerce]]></displayName>
-    <version><![CDATA[1.0.2]]></version>
+    <version><![CDATA[1.0.3]]></version>
     <description><![CDATA[Система аналитики для интернет-магазинов]]></description>
     <author><![CDATA[inTarget Team]]></author>
     <tab><![CDATA[analytics_stats]]></tab>

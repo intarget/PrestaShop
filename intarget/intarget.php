@@ -1,9 +1,9 @@
 <?php
 /**
- * 2015 inTarget
+ * 2016 inTarget
  *
  * @author    inTarget RU <https://intarget.ru/>
- * @copyright 2015 inTarget RU
+ * @copyright 2016 inTarget RU
  * @license   GNU General Public License, version 2
  */
 
@@ -14,7 +14,7 @@ class Intarget extends Module
         $this->name = 'intarget';
         $this->tab = 'analytics_stats';
         $this->config_form = 'password';
-        $this->version = '1.0.2';
+        $this->version = '1.0.3';
         $this->author = 'inTarget Team';
         $this->need_instance = 1;
 
@@ -41,6 +41,7 @@ class Intarget extends Module
 
         return parent::install() &&
         $this->registerHook('displayTop') &&
+        $this->registerHook('displayHeader') &&
         $this->registerHook('ActionCustomerAccountAdd') &&
         $this->registerHook('displayFooter') &&
         $this->registerHook('backOfficeHeader') &&
@@ -179,13 +180,13 @@ class Intarget extends Module
                     'type' => 'free',
                     'col' => $ulogin_col,
                     'desc' => $this->l('Введите email и ключ API из личного кабинета ')
-                        . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>',
+                        . '<a href="https://intarget.ru" target="_blank">inTarget.ru</a>',
                     'name' => 'text'),
                 array(
                     'type' => 'free',
                     'col' => $ulogin_col,
                     'desc' => $this->l('Если вы ещё не зарегистрировались в сервисе inTarget это можно
-                    сделать по ссылке ') . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>',
+                    сделать по ссылке ') . '<a href="https://intarget.ru" target="_blank">inTarget.ru</a>',
                     'name' => 'text'),
                 array(
                     'type' => 'free',
@@ -270,7 +271,7 @@ class Intarget extends Module
                     'type' => 'free',
                     'col' => $ulogin_col,
                     'desc' => $this->l('Войдите в личный кабинет ')
-                        . '<a href="http://intarget.ru" target="_blank">inTarget.ru</a>'
+                        . '<a href="https://intarget.ru" target="_blank">inTarget.ru</a>'
                         . $this->l(' для просмотра статистики.'),
                     'name' => 'text'),
                 array(
@@ -353,11 +354,11 @@ class Intarget extends Module
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Content-Type:application/json', 'Accept: application/json'));
-        curl_setopt($ch, CURLOPT_URL, "http://intarget.ru/api/registration.json"); //intarget-dev.lembrd.com
+        curl_setopt($ch, CURLOPT_URL, "https://intarget.ru/api/registration.json");
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsondata);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         $server_output = curl_exec($ch);
 
         $json_result = Tools::jsonDecode($server_output);
@@ -376,7 +377,7 @@ class Intarget extends Module
                 }
                 if ($json_result->code == '404') {
                     $json_result->message = $this->l('Данный email ') . $email . $this->l(' не
-                    зарегистрирован на сайте http://intarget.ru');
+                    зарегистрирован на сайте https://intarget.ru');
                 }
                 if (!isset($json_result->code)) {
                     $json_result->message = $this->l('Неверный формат данных.');
@@ -384,7 +385,7 @@ class Intarget extends Module
                 return array('error' => $json_result->message);
             }
         }
-        return array('error' => $this->l('Ответ от сервера inTarget не получен. Попробуйсте, пожалуйста, позднее.'));
+        return true;
     }
 
     public $itemjscode = "

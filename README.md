@@ -3,7 +3,7 @@
 Tags: intarget, analytics, statistics, sales, widgets, ecommerce, интаргет, аналитика, статистика  
 Requires at least: 1.5  
 Tested up to: 1.6.1.1  
-Stable tag: 1.0.2  
+Stable tag: 1.0.3  
 License: GNU General Public License, version 2  
 
 **inTarget eCommerce** - система аналитики для интернет-магазинов, с возможностью отслеживать продажи и анализировать конверсии в реальном времени.
@@ -37,6 +37,8 @@ License: GNU General Public License, version 2
 **ключ API:** необходимо указать ключ API, полученный в ЛК [inTarget](https://intarget.ru).
 
 ## Изменения
+#### 1.0.3
+- Улучшена совместимость с версиями PrestaShop 1.5
 
 #### 1.0.2
  - Добавлена таблица модуля ps_intarget_table.
